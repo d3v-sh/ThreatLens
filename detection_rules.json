@@ -1,0 +1,271 @@
+{
+  "rules": [
+    {
+      "id": "SUSP_PROC_001",
+      "title": "Suspicious Process Location - AppData",
+      "description": "Process running from AppData directory, commonly used by malware",
+      "data_source": "processes",
+      "conditions": [
+        {
+          "field": "path",
+          "operator": "contains",
+          "value": "\\appdata\\"
+        }
+      ],
+      "exclusions": [
+        {
+          "field": "path",
+          "operator": "contains",
+          "value": "\\appdata\\local\\microsoft\\"
+        },
+        {
+          "field": "path",
+          "operator": "contains",
+          "value": "\\appdata\\local\\programs\\"
+        },
+        {
+          "field": "path",
+          "operator": "contains",
+          "value": "\\go-build\\"
+        },
+        {
+          "field": "name",
+          "operator": "contains",
+          "value": "chrome.exe"
+        },
+        {
+          "field": "name",
+          "operator": "contains",
+          "value": "Code.exe"
+        },
+        {
+          "field": "name",
+          "operator": "contains",
+          "value": "teams.exe"
+        },
+        {
+          "field": "name",
+          "operator": "contains",
+          "value": "slack.exe"
+        },
+        {
+          "field": "name",
+          "operator": "contains",
+          "value": "discord.exe"
+        },
+        {
+          "field": "name",
+          "operator": "contains",
+          "value": "spotify.exe"
+        },
+        {
+          "field": "name",
+          "operator": "contains",
+          "value": "hostappserviceupdater.exe"
+        }
+      ],
+      "severity": 30,
+      "mitre": "T1059"
+    },
+    {
+      "id": "SUSP_PROC_002",
+      "title": "Process in Temp Directory",
+      "description": "Process running from temporary directory",
+      "data_source": "processes",
+      "conditions": [
+        {
+          "field": "path",
+          "operator": "contains",
+          "value": "\\temp\\"
+        }
+      ],
+      "exclusions": [
+        {
+          "field": "path",
+          "operator": "contains",
+          "value": "\\go-build\\"
+        },
+        {
+          "field": "name",
+          "operator": "contains",
+          "value": "installer"
+        }
+      ],
+      "severity": 30,
+      "mitre": "T1059"
+    },
+    {
+      "id": "SUSP_PS_001",
+      "title": "Encoded PowerShell Execution",
+      "description": "PowerShell with encoded command detected - often used to obfuscate malicious commands",
+      "data_source": "processes",
+      "conditions": [
+        {
+          "field": "cmdline",
+          "operator": "contains",
+          "value": "powershell"
+        },
+        {
+          "field": "cmdline",
+          "operator": "contains",
+          "value": "-encodedcommand"
+        }
+      ],
+      "exclusions": [],
+      "severity": 40,
+      "mitre": "T1059.001"
+    },
+    {
+      "id": "SUSP_PROC_002",
+      "exclusions": [
+        {
+          "field": "path",
+          "operator": "contains",
+          "value": "\\go-build"
+        },
+        {
+          "field": "name",
+          "operator": "contains",
+          "value": "installer"
+        }
+      ]
+    },
+    {
+      "id": "SUSP_PS_002",
+      "title": "PowerShell Download Cradle",
+      "description": "PowerShell downloading content from internet",
+      "data_source": "processes",
+      "conditions": [
+        {
+          "field": "cmdline",
+          "operator": "contains",
+          "value": "powershell"
+        },
+        {
+          "field": "cmdline",
+          "operator": "contains",
+          "value": "downloadstring"
+        }
+      ],
+      "exclusions": [],
+      "severity": 50,
+      "mitre": "T1059.001"
+    },
+    {
+      "id": "SUSP_PS_003",
+      "title": "PowerShell Bypass Execution Policy",
+      "description": "PowerShell bypassing execution policy",
+      "data_source": "processes",
+      "conditions": [
+        {
+          "field": "cmdline",
+          "operator": "contains",
+          "value": "powershell"
+        },
+        {
+          "field": "cmdline",
+          "operator": "contains",
+          "value": "-executionpolicy bypass"
+        }
+      ],
+      "exclusions": [],
+      "severity": 35,
+      "mitre": "T1059.001"
+    },
+    {
+      "id": "SUSP_PS_004",
+      "title": "PowerShell Hidden Window",
+      "description": "PowerShell running with hidden window",
+      "data_source": "processes",
+      "conditions": [
+        {
+          "field": "cmdline",
+          "operator": "contains",
+          "value": "powershell"
+        },
+        {
+          "field": "cmdline",
+          "operator": "contains",
+          "value": "-windowstyle hidden"
+        }
+      ],
+      "exclusions": [],
+      "severity": 40,
+      "mitre": "T1059.001"
+    },
+    {
+      "id": "SUSP_CMD_001",
+      "title": "CMD from Unusual Location",
+      "description": "CMD.exe running from non-standard location",
+      "data_source": "processes",
+      "conditions": [
+        {
+          "field": "name",
+          "operator": "equals",
+          "value": "cmd.exe"
+        },
+        {
+          "field": "path",
+          "operator": "contains",
+          "value": "\\appdata\\"
+        }
+      ],
+      "exclusions": [],
+      "severity": 40,
+      "mitre": "T1059.003"
+    },
+    {
+      "id": "SUSP_NET_001",
+      "title": "Suspicious Network Tool",
+      "description": "Network reconnaissance tool detected",
+      "data_source": "processes",
+      "conditions": [
+        {
+          "field": "name",
+          "operator": "contains",
+          "value": "netcat"
+        }
+      ],
+      "exclusions": [],
+      "severity": 45,
+      "mitre": "T1046"
+    },
+    {
+      "id": "SUSP_MIMIKATZ_001",
+      "title": "Potential Mimikatz Usage",
+      "description": "Process name or path suggests credential dumping tool",
+      "data_source": "processes",
+      "conditions": [
+        {
+          "field": "name",
+          "operator": "contains",
+          "value": "mimikatz"
+        }
+      ],
+      "exclusions": [],
+      "severity": 80,
+      "mitre": "T1003.001"
+    },
+    {
+      "id": "SUSP_SCRIPT_001",
+      "title": "Suspicious Script Execution",
+      "description": "Script file executed from temp directory",
+      "data_source": "processes",
+      "conditions": [
+        {
+          "field": "cmdline",
+          "operator": "contains",
+          "value": ".vbs"
+        },
+        {
+          "field": "path",
+          "operator": "contains",
+          "value": "\\temp\\"
+        }
+      ],
+      "exclusions": [],
+      "severity": 45,
+      "mitre": "T1059.005"
+    }
+  ]
+}

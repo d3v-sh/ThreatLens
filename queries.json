@@ -1,0 +1,16 @@
+{
+  "queries": [
+    {
+      "name": "processes",
+      "sql": "\n\t\t\tSELECT pid, parent, name, path, cmdline, start_time\n\t\t\tFROM processes;\n\t\t",
+      "description": "",
+      "enabled": true
+    },
+    {
+      "name": "listening_ports",
+      "sql": "\n\t\t\tSELECT lp.port, lp.protocol, lp.address, p.pid, p.name, p.path\n\t\t\tFROM listening_ports lp\n\t\t\tJOIN processes p ON lp.pid = p.pid;\n\t\t",
+      "description": "",
+      "enabled": true
+    }
+  ]
+}

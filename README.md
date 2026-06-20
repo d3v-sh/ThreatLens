@@ -7,7 +7,7 @@
    | | | | | | | |  __/ (_| | |_| |__|  __/ | | \__ \
    |_| |_| |_|_|  \___|\__,_|\__|_____\___|_| |_|___/
                                                       
-                    Made by som3on3
+                    Made by d1_d3m0n
 ```
 
 A powerful, configuration-driven host security scanner for Windows that detects suspicious processes, malicious PowerShell execution, and potential compromise indicators using osquery.
@@ -320,7 +320,7 @@ This tool is for **authorized security testing and educational purposes only**. 
 
 ## Author
 
-**som3on3**
+**d1_d3m0n**
 
 ## Support
 

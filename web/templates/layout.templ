@@ -1,0 +1,83 @@
+package templates
+
+templ Layout(title string) {
+	<!DOCTYPE html>
+	<html class="dark" lang="en">
+		<head>
+			<meta charset="utf-8"/>
+			<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+			<title>{ title } — ThreatLens</title>
+			<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+			<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+			<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+			<script src="https://cdn.jsdelivr.net/npm/htmx.org@1.9.12/dist/htmx.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/htmx.org@1.9.12/dist/ext/sse.js"></script>
+			<script id="tailwind-config">
+				tailwind.config = {
+					darkMode: "class",
+					theme: {
+						extend: {
+							colors: {
+								"primary": "#004ac6",
+								"primary-container": "#2563eb",
+								"on-primary-container": "#eeefff",
+								"primary-fixed": "#dbe1ff",
+								"secondary-fixed-dim": "#b7c8e1",
+								"on-secondary-fixed": "#0b1c30",
+								"tertiary-fixed-dim": "#4edea3",
+								"outline-variant": "#c3c6d7",
+								"error": "#ba1a1a",
+								"background": "#0F172A",
+							},
+						},
+					},
+				}
+			</script>
+			<style>
+				body { background-color: #0F172A; color: #eeefff; font-family: 'Inter', sans-serif; }
+				.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+				::-webkit-scrollbar { width: 6px; }
+				::-webkit-scrollbar-track { background: transparent; }
+				::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+				.tonal-card { background-color: #1e293b; border: 1px solid #334155; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1); }
+				.sidebar-bg { background-color: #0b1c30; }
+				.event-item { animation: slideIn 0.3s ease-out; }
+				@keyframes slideIn { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: translateX(0); } }
+				.chat-bubble-user, .chat-bubble-ai { animation: bubbleIn 0.2s ease-out; }
+				@keyframes bubbleIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+			</style>
+		</head>
+		<body class="flex h-screen overflow-hidden">
+			{ children... }
+			<script>
+				function appendUserMsg(form) {
+					const input = form.querySelector('input[name="question"]');
+					const msg = input.value.trim();
+					if (!msg) return;
+					const feed = document.getElementById('chat-messages');
+					const userBubble = document.createElement('div');
+					userBubble.className = 'flex justify-end chat-bubble-user';
+					userBubble.innerHTML = `<div class="max-w-[80%] bg-blue-600 text-white p-3 rounded-xl rounded-tr-none shadow-sm text-sm">${msg}</div>`;
+					feed.appendChild(userBubble);
+					const thinking = document.createElement('div');
+					thinking.id = 'thinking-indicator';
+					thinking.className = 'flex justify-start gap-2 chat-bubble-ai';
+					thinking.innerHTML = `<div class="w-8 h-8 rounded-lg bg-slate-700 flex-shrink-0 flex items-center justify-center"><span class="material-symbols-outlined text-blue-300 text-sm">smart_toy</span></div><div class="bg-slate-800 border border-slate-700 text-slate-300 p-3 rounded-xl rounded-tl-none text-sm italic">Analyzing...</div>`;
+					feed.appendChild(thinking);
+					feed.scrollTop = feed.scrollHeight;
+				}
+				function removeThinking() {
+					const t = document.getElementById('thinking-indicator');
+					if (t) t.remove();
+				}
+				setInterval(() => {
+					document.querySelectorAll('.resource-bar').forEach(bar => {
+						const cur = parseInt(bar.style.width);
+						const v = Math.floor(Math.random() * 5) - 2;
+						bar.style.width = Math.min(Math.max(cur + v, 5), 95) + '%';
+					});
+				}, 3000);
+			</script>
+		</body>
+	</html>
+}
